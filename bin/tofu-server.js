@@ -5,6 +5,7 @@ const registerLogger = require('../lib/register-logger')
 
 program
     .option('-p, --port <port>', '指定端口')
+    .option('-b, --build', '测试构建的包')
     .parse(process.argv)
 
 launchServer()
@@ -15,5 +16,9 @@ function launchServer () {
     if (program.port) {
         port = program.port
     }
-    require('../webpack/server.js')(port)
+    if (program.build) {
+        require('../webpack/server-build.js')
+    } else {
+        require('../webpack/server.js')(port)
+    }
 }

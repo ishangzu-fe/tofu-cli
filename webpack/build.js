@@ -3,6 +3,7 @@ const rm = require('rimraf')
 const path = require('path')
 const chalk = require('chalk')
 const webpack = require('webpack')
+const merge = require('webpack-merge')
 
 const { log } = require('../lib/log')
 const config = require('./config').build

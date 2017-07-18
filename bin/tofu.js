@@ -7,8 +7,6 @@ const checkHasInited = require('../lib/check-init')
 const checkVersion = require('../lib/check-version')
 const { resolveCwd } = require('../lib/utils')
 
-beforeInit()
-
 program.version(require('../package').version)
     .usage('<command> [options]')
     .command('init', '创建一个基于tofu的项目')
@@ -17,6 +15,8 @@ program.version(require('../package').version)
     .command('update', '更新框架以及命令行工具至最新版本')
     .command('lint', '校验 JS 代码')
     .parse(process.argv)
+
+beforeInit()
 
 registerLogger('', process)
 
