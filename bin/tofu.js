@@ -16,8 +16,7 @@ program.version(require('../package').version)
     .command('lint', '校验 JS 代码')
     .parse(process.argv)
 
-beforeInit()
-
+if (process.argv[2] !== 'lint') beforeInit()
 registerLogger('', process)
 
 async function beforeInit () {

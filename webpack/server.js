@@ -7,7 +7,7 @@ const app = new Koa()
 const merge = require('webpack-merge')
 const staticMiddleware = require('koa-static')
 const webpackMiddleware = require('koa-webpack')
-const proxyMiddleware = require('koa-proxies')
+const proxy = require('koa-proxies')
 const historyFallback = require('koa2-history-api-fallback')
 
 const { resolveCwd, isPlainObject } = require('./lib/utils')
@@ -38,7 +38,7 @@ app.use(webpackMiddlewareInstance)
 if (tofurc && tofurc.proxy) {
     const proxyTable = tofurc.proxy
     Object.keys(proxyTable).forEach(path => {
-        app.use(proxyMiddleware(path, proxyTable[path]))
+        app.use(proxy(path, proxyTable[path]))
     })
 }
 

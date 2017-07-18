@@ -6,6 +6,7 @@ const tofurc = require('../lib/get-config')()
 
 program
     .option('-f, --fix', '自动修复')
+    .option('-q, --quiet', '安静地校验')
     .parse(process.argv)
 
 let rules = {
@@ -49,6 +50,6 @@ console.log(formatter(report.results))
 
 if (report.errorCount) {
     process.exit(1)
-} else {
+} else if (!program.quiet) {
     logSuccess('Perfect code!')
 }
