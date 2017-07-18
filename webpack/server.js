@@ -10,8 +10,7 @@ const webpackMiddleware = require('koa-webpack')
 const proxyMiddleware = require('koa-proxies')
 const historyFallback = require('koa2-history-api-fallback')
 
-const { resolveCwd } = require('./lib/utils')
-const { isPlainObject } = require('./lib/utils')
+const { resolveCwd, isPlainObject } = require('./lib/utils')
 
 const tofurc = require('../lib/get-config')()
 let webpackConfig = require('./webpack.dev')
