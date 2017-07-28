@@ -17,34 +17,37 @@ const getCssLoaders = (env, inVue) => {
     if (env === 'production') {
         return ExtractTextPlugin.extract({
             fallback: styleLoader,
-            use: ['css-loader', 'sass-loader']
+            use: ['css-loader',{
+                loader: 'postcss-loader',
+                options: {
+                    config: {
+                        path: path.posix.join(__dirname, 'postcss.config.js')
+                    },
+                    plugins: (loader) => [
+                        require('autoprefixer')()
+                    ]
+                }
+            }, 'sass-loader']
         })
     } else {
-        let loaders = [styleLoader, 'css-loader', 'sass-loader']
-        if (inVue) {
-            return loaders.join('!')
-        } else {
-            return loaders
-        }
+        return [styleLoader, 'css-loader', {
+            loader: 'postcss-loader',
+            options: {
+                config: {
+                    path: path.posix.join(__dirname, 'postcss.config.js')
+                },
+                plugins: (loader) => [
+                    require('autoprefixer')()
+                ]
+            }
+        }, 'sass-loader']
     }
 }
 
 module.exports = function (config) {
     const env = JSON.parse(config.env.NODE_ENV)
     const tofurc = require('../lib/get-config')()
-    let eslintRules = {
-        'semi': ['error', 'always'],
-        'indent': ['error', 4],
-        'brace-style': ['error', '1tbs'],
-        'keyword-spacing': ['error', {
-            'after': true
-        }],
-        'eqeqeq': 2,
-        'no-console': process.env.NODE_ENV === 'production'
-            ? 1 : 0,
-        'no-debugger': process.env.NODE_ENV ===
-            'production' ? 2 : 0
-    }
+    let eslintRules = require('./rules')
     if (tofurc && tofurc.rules) {
         eslintRules = Object.assign({}, eslintRules, tofurc.rules)
     }
@@ -112,22 +115,21 @@ module.exports = function (config) {
                 },
                 {
                     test: /\.html$/,
+                    exclude: [resolveCwd('template.html')],
                     loader: 'vue-html-loader'
                 },
                 {
                     test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                     loader: 'url-loader',
-                    query: {
+                    options: {
                         limit: 10000,
-                        name: getAssetsPath('img/[name].[hash:7].[ext]', config)
                     }
                 },
                 {
                     test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                     loader: 'url-loader',
-                    query: {
+                    options: {
                         limit: 10000,
-                        name: getAssetsPath('fonts/[name].[hash:7].[ext]', config)
                     }
                 }
             ]

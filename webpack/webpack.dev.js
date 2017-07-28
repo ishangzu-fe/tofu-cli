@@ -3,6 +3,7 @@ const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
+const { resolveCwd } = require('./lib/utils')
 const config = require('./config').dev
 const baseWebpackConfig = require('./webpack.base')(config)
 const hotReload = require('path').resolve(
@@ -23,6 +24,7 @@ module.exports = merge(baseWebpackConfig, {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new HtmlWebpackPlugin({
+            title: require(resolveCwd('config')).title,
             template: 'template.html',
             inject: true
         }),

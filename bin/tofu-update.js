@@ -12,7 +12,7 @@ const klaw = require('klaw-sync')
 const { log } = require('../lib/log')
 const registerLogger = require('../lib/register-logger')
 const merge = require('../lib/merge')
-const download = require('../lib/download-from-git')
+const pacote = require('pacote')
 const getConfig = require('../lib/get-config')
 const { resolveCwd } = require('../lib/utils')
 
@@ -43,11 +43,11 @@ async function updateFiles () {
     await checkGit()
 
     try {
-        await download(
-            'ishangzu-fe/tofu-boilerplate',
-            resolveCwd('temp'),
-            false
-        );
+        await pacote.extract(
+            'pitaya',
+            './temp',
+            { registry: 'http://registry.npm.taobao.org' }
+        )
     } catch (err) {
         console.error('下载模板出错，请重试')
         console.error(err)
@@ -79,6 +79,7 @@ async function updateFiles () {
 
     needUpdateFiles = reduceList(needUpdateFiles, ignoreFiles)
     let needDeleteFiles = []
+    let fatalList = []
     needUpdateFiles = needUpdateFiles.reduce((rst, file) => {
         // 处理需要删除的文件
         if (/^\!/.test(file)) {
@@ -89,11 +90,16 @@ async function updateFiles () {
         const target = resolveCwd(file)
         const src = resolveCwd('temp', file)
 
-        fs.lstatSync(src).isFile() ?
-            rst.push(file) :
-            (rst = rst.concat(klaw(target).map(obj => {
-                return path.relative(cwd, obj.path).replace(/^temp\//, '')
-            })))
+        try {
+            fs.lstatSync(src).isFile()
+                ? rst.push(file)
+                : (rst = rst.concat(klaw(target).map(obj => {
+                    return path.relative(cwd, obj.path).replace(/^temp\//, '')
+                })))
+        } catch (err) {
+            fatalList.push(target)
+        }
+
         return rst
     }, [])
 
@@ -101,12 +107,16 @@ async function updateFiles () {
     spinner.start('正在更新文件...')
     let conflictFiles = []
     needUpdateFiles.forEach(file => {
-        const src = resolveCwd('temp', file)
-        const target = resolveCwd(file)
-        const empty = resolveCwd('temp', 'any')
-        fs.ensureFileSync(empty)
-        const result = merge(target, empty, src)
-        if (!result) conflictFiles.push(file)
+        try {
+            const src = resolveCwd('temp', file)
+            const target = resolveCwd(file)
+            const empty = resolveCwd('temp', 'any')
+            fs.ensureFileSync(empty)
+            const result = merge(target, empty, src)
+            if (!result) conflictFiles.push(file)
+        } catch (err) {
+            fatalList.push(file)
+        }
     })
     needDeleteFiles.forEach(file => {
         fs.removeSync(resolveCwd(file))
@@ -114,7 +124,11 @@ async function updateFiles () {
     spinner.succeed('更新文件完成').stop()
     if (conflictFiles.length)
         log('\n以下文件有冲突，请手动修复：', 'red')
-        conflictFiles.forEach(f => log(f, 'red'))
+        conflictFiles.forEach(f => log(`  ${f}`, 'red'))
+
+    if (fatalList.length)
+        log('\n以下文件更新失败，请手动更新：', 'red')
+        fatalList.forEach(f => log(`  ${f}`, 'red'))
 
     /**
      * Check working tree if is clear
@@ -164,8 +178,10 @@ async function updateFiles () {
 
         if (tofurc && newUpdateList && Array.isArray(newUpdateList)) {
             if (tofurc._meta && config._meta) {
-                const newVersion = semver.valid(tofurc.version)
-                const oldVersion = semver.valid(config.version)
+                if (tofurc._meta.type !== config._meta.type) return []
+
+                const newVersion = semver.valid(tofurc._meta.version)
+                const oldVersion = semver.valid(config._meta.version)
                 if (!newVersion || !oldVersion) throw new Error('配置文件版本信息无效')
 
                 if (semver.gt(newVersion, oldVersion)) {

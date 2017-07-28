@@ -51,12 +51,20 @@ tofu server [-p|--port <port>]
 
 ~~~bash
 tofu build
+
+# 不压缩
+tofu build [-C|--no-compress]
+# 压缩后删除 dist
+tofu build [-d|--delete]
 ~~~
 
 ### update
 
 ~~~bash
 tofu update
+
+# 更新模板，i-tofu 和 tofu-cli
+tofu update [-a|--all]
 ~~~
 
 ### lint
@@ -67,3 +75,45 @@ tofu lint
 # 自动修复
 tofu lint [-f|--fix]
 ~~~
+
+## .tofurc 配置选项说明
+
+<table width="100%" cellspacing="0" cellpadding="0" border="1" style="border-collapse: collapse;display: table;text-align: center;">
+	<thead>
+		<tr>
+			<th>参数</th>
+			<th>说明</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>href</td>
+			<td>hostname</td>
+		</tr>
+        <tr>
+			<td>port</td>
+			<td>端口</td>
+		</tr>
+        <tr>
+			<td>proxy</td>
+			<td>代理配置</td>
+		</tr>
+        <tr>
+			<td>rules</td>
+			<td>Eslint 的规则配置</td>
+		</tr>
+        <tr>
+			<td>webpack</td>
+			<td>用来覆盖基础配置</td>
+		</tr>
+        <tr>
+			<td>updateList</td>
+			<td>配置需要更新的文件</td>
+		</tr>
+        <tr>
+			<td>_meta</td>
+			<td>元信息</td>
+		</tr>
+	</tbody>
+</table>
+
