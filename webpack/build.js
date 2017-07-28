@@ -21,7 +21,7 @@ if (tofurc && tofurc.webpack && isPlainObject(tofurc.webpack)) {
     webpackConfig = merge(webpackConfig, tofurc.webpack)
 }
 
-module.exports = () => {
+module.exports = (compress, deleteDist) => {
     const spinner = ora('构建打包中...')
     spinner.start()
 
@@ -43,7 +43,9 @@ module.exports = () => {
             log('打包成功。', 'cyan')
 
             // 压缩 dist 文件夹，并移动到桌面
-            require('./lib/compress.js')()
+            if (compress) {
+                require('./lib/compress.js')(deleteDist)
+            }
         })
     })
 }

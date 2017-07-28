@@ -1,43 +1,119 @@
-## Tofu-cli
-> Tofu 框架配套命令行构建工具。
+# Pan🍳
 
-### 文档适用版本
+> Simple CLI for scaffolding Vue.js projects
+<a href="https://www.npmjs.com/package/tofu-cli">
+<img src="https://api.travis-ci.org/ishangzu-fe/pan.svg?branch=dev" alt="Build Status">
+</a>
 
-**>=0.1.3**
+## 核心
 
-### 安装与更新
-  
-`npm i -g tofu-cli@latest`
-  
-或者 `cnpm i -g tofu-cli@latest`
-  
-或者 `yarn global add tofu-cli@latest`
+简单易用当然是我的目标之一，准确来说，我希望给开发者们提供一个“无压”的开发环境。
+每个人的精力都是有限的，因为有限，我们就需要将注意力集中在项目的核心 -- 代码上。但是现实的开发环境并不是如此，我们时常被代码之外的内容夺去注意力，甚至花上更多的精力去处理这些并不能让代码变得更好的东西上。所以我选择将代码之外的这部分内容剥离。
 
-### 使用
+## 介绍
 
-1. 初始化项目
+现在来简单介绍下项目的构成，它主要由这几部分内容构成：
 
-	`tofu init [-g|--git <git-repo>]`
+- 项目搭建
+- 开发环境
+- 项目打包
+- 内容更新
+- 代码校验
 
-		- git : 指定git仓库，会在完成项目初始化后进行git的初始化。
+分别对应着五个命令：
 
-2. 运行开发服务
+- tofu init
+- tofu server
+- tofu build
+- tofu update
+- tofu lint
 
-	`tofu server [-p|--port <port>]`
+现在来介绍下这些命令的用法。
 
-		- port : 指定服务运行端口。
+## 用法
 
-3. 打包项目
+### init
 
-	`tofu build [--zip | --to <dist>]`
+~~~bash
+tofu init
+~~~
 
-		- zip : 打包后压缩
-		- to : 压缩后移动文件到指定目录
+### server
 
-4. 更新 Tofu
+~~~bash
+tofu server
 
-	`tofu update [--npm|--cnpm|--yarn]`
+# 指定端口
+tofu server [-p|--port <port>]
+~~~
 
-		- npm : 使用npm更新
-		- cnpm : 使用cnpm更新
-		- yar  : 使用yarn更新
+### build
+
+~~~bash
+tofu build
+
+# 不压缩
+tofu build [-C|--no-compress]
+# 压缩后删除 dist
+tofu build [-d|--delete]
+~~~
+
+### update
+
+~~~bash
+tofu update
+
+# 更新模板，i-tofu 和 tofu-cli
+tofu update [-a|--all]
+~~~
+
+### lint
+
+~~~bash
+tofu lint
+
+# 自动修复
+tofu lint [-f|--fix]
+~~~
+
+## .tofurc 配置选项说明
+
+<table width="100%" cellspacing="0" cellpadding="0" border="1" style="border-collapse: collapse;display: table;text-align: center;">
+	<thead>
+		<tr>
+			<th>参数</th>
+			<th>说明</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>href</td>
+			<td>hostname</td>
+		</tr>
+        <tr>
+			<td>port</td>
+			<td>端口</td>
+		</tr>
+        <tr>
+			<td>proxy</td>
+			<td>代理配置</td>
+		</tr>
+        <tr>
+			<td>rules</td>
+			<td>Eslint 的规则配置</td>
+		</tr>
+        <tr>
+			<td>webpack</td>
+			<td>用来覆盖基础配置</td>
+		</tr>
+        <tr>
+			<td>updateList</td>
+			<td>配置需要更新的文件</td>
+		</tr>
+        <tr>
+			<td>_meta</td>
+			<td>元信息</td>
+		</tr>
+	</tbody>
+</table>
+

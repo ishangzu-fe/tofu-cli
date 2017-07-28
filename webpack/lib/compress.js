@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const cp = require('child_process')
 const cwd = process.cwd()
@@ -22,7 +22,7 @@ archive.on('error', function (err) {
 
 archive.pipe(output)
 
-module.exports = () => {
+module.exports = (deleteDist) => {
     const dist = path.posix.join(require('os').userInfo().homedir, 'Desktop', 'dist.zip')
 
     output.on('close', function () {
@@ -32,6 +32,10 @@ module.exports = () => {
                 throw err
             } else {
                 log(`\n已经将打包好的文件移动到桌面，请查看 ${dist}\n`, 'yellow')
+
+                if (deleteDist) {
+                    fs.removeSync(resolveCwd('./dist'))
+                }
             }
         })
     })

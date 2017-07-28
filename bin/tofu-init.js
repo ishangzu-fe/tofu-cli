@@ -1,9 +1,11 @@
 const cwd = process.cwd()
 
+const fs = require('fs-extra')
 const inquirer = require('inquirer')
 const ora = require('ora')
 const pacote = require('pacote')
 
+const { resolveCwd } = require('../lib/utils')
 const { log } = require('../lib/log')
 const registerLogger = require('../lib/register-logger')
 
@@ -22,18 +24,22 @@ async function init () {
     if (!confirm) return
 
     const spinner = ora('正在下载模板文件...')
+    let name, registry
+    const dist = './'
+    const registry = 'http://registry.npm.taobao.org'
+    spinner.start()
     switch (templateType) {
         case 'PC':
-            spinner.start()
-            await pacote.extract('pitaya', './', {
-                registry: 'http://registry.npm.taobao.org'
-            })
-            spinner.stop()
-            afterDownload()
+            name = 'pitaya'
             break
+        case 'electron':
+            name = 'macadamia'
         default:
             break
     }
+    await pacote.extract(name, dist, { registry })
+    spinner.stop()
+    afterDownload()
 }
 
 async function selectTemplate () {
@@ -56,6 +62,8 @@ async function selectTemplate () {
  * @param {String} dist 项目目录
  */
 function afterDownload () {
+    fs.removeSync(resolveCwd('.npmignore'))
+
     log();
     log('已完成项目的初始化:', 'green');
     log();

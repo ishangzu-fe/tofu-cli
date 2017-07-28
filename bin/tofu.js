@@ -7,7 +7,12 @@ const checkHasInited = require('../lib/check-init')
 const checkVersion = require('../lib/check-version')
 const { resolveCwd } = require('../lib/utils')
 
-program.version(require('../package').version)
+main()
+
+async function main () {
+    if (process.argv[2] !== 'lint') await beforeInit()
+
+    program.version(require('../package').version)
     .usage('<command> [options]')
     .command('init', '创建一个基于tofu的项目')
     .command('server', '运行开发服务')
@@ -16,13 +21,12 @@ program.version(require('../package').version)
     .command('lint', '校验 JS 代码')
     .parse(process.argv)
 
-beforeInit()
-
-registerLogger('', process)
+    registerLogger('', process)
+}
 
 async function beforeInit () {
     if (process.argv[2] !== 'init') {
-        await checkHasInited()
+        checkHasInited()
 
         const packageJson = require(resolveCwd('package.json'))
         if (packageJson.dependencies && packageJson.dependencies['i-tofu'])

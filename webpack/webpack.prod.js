@@ -1,5 +1,5 @@
 const path = require('path')
-const cwd = process.cwd()
+const { resolveCwd } = require('./lib/utils')
 
 const webpack = require('webpack')
 const merge = require('webpack-merge')
@@ -38,6 +38,7 @@ const webpackConfig = merge(baseWebpackConfig, {
             }
         }),
         new HtmlWebpackPlugin({
+            title: require(resolveCwd('config')).title,
             filename: config.index,
             template: 'template.html',
             inject: true,
@@ -54,7 +55,7 @@ const webpackConfig = merge(baseWebpackConfig, {
                     module.resource &&
                     /\.js$/.test(module.resource) &&
                     module.resource.indexOf(
-                        path.join(process.cwd(), 'node_modules')
+                        resolveCwd('node_modules')
                     ) === 0
                 )
             }
@@ -64,7 +65,7 @@ const webpackConfig = merge(baseWebpackConfig, {
             chunks: ['vendor']
         }),
         new CopyWebpackPlugin([{
-            from: path.resolve(cwd, 'static'),
+            from: resolveCwd('static'),
             to: config.assetsSubDirectory,
             ignore: ['.*']
         }])
