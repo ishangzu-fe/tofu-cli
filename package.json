@@ -1,6 +1,6 @@
 {
   "name": "tofu-cli",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "A tool",
   "main": "bin/tofu.js",
   "scripts": {
@@ -46,6 +46,7 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.9.0",
     "friendly-errors-webpack-plugin": "^1.4.0",
+    "fs-extra": "^4.0.1",
     "function-bind": "^1.0.2",
     "html-webpack-plugin": "^2.28.0",
     "http-proxy-middleware": "^0.17.3",
@@ -55,7 +56,7 @@
     "json-loader": "^0.5.4",
     "klaw-sync": "^2.1.0",
     "koa": "^2.3.0",
-    "koa-proxies": "shanevv/koa-proxies",
+    "koa-proxies": "^0.5.2",
     "koa-static": "^4.0.1",
     "koa-webpack": "^0.6.0",
     "koa2-history-api-fallback": "0.0.5",
