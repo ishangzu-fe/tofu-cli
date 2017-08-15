@@ -3,13 +3,18 @@ const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
-const { resolveCwd } = require('./lib/utils')
+const { resolveCwd, isPlainObject } = require('./lib/utils')
 const config = require('./config').dev
-const baseWebpackConfig = require('./webpack.base')(config)
+let baseWebpackConfig = require('./webpack.base')(config)
 const hotReload = require('path').resolve(
     __dirname,
     '../node_modules/webpack-hot-middleware/client?reload=true&quiet=true'
 )
+
+const tofurc = require('../lib/get-config')()
+if (tofurc && tofurc.webpack && isPlainObject(tofurc.webpack)) {
+    baseWebpackConfig = merge(baseWebpackConfig, tofurc.webpack)
+}
 
 Object.keys(baseWebpackConfig.entry).forEach((name) => {
     baseWebpackConfig.entry[name] = [hotReload].concat(baseWebpackConfig.entry[name])

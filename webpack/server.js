@@ -17,9 +17,6 @@ const tofurc = require('../lib/get-config')()
 
 module.exports = (port, peace) => {
     let webpackConfig = require('./webpack.dev')
-    if (tofurc && tofurc.webpack && isPlainObject(tofurc.webpack)) {
-        webpackConfig = merge(webpackConfig, tofurc.webpack)
-    }
     if (peace) {
         webpackConfig.module.rules.shift()
     }
@@ -53,16 +50,23 @@ module.exports = (port, peace) => {
 
     port = port || (tofurc && tofurc.port) || 8080
     const host = (tofurc && tofurc.href) || 'localhost'
-    const url = `http://${host}:${port}`
 
-    app.listen(port)
+    const server = app.listen(port)
+    server.on('error', err => {
+        if (err.code === 'EADDRINUSE') {
+            port += 1
+            app.listen(port)
+        } else {
+            throw err
+        }
+    })
 
     webpackMiddlewareInstance.dev.waitUntilValid(() => {
         spinner.stop()
 
         if (tofurc._meta.type === 'electron') {
             const child = proc.spawn(
-                'npm',
+                process.platform === 'win32' ? 'npm.cmd' : 'npm',
                 ['run', 'dev'],
                 { stdio: 'inherit' }
             )
@@ -70,6 +74,7 @@ module.exports = (port, peace) => {
                 process.exit(code)
             })
         } else {
+            const url = `http://${host}:${port}`
             require('opn')(url)
         }
     })

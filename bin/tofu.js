@@ -25,12 +25,14 @@ async function main () {
 }
 
 async function beforeInit () {
-    if (process.argv[2] !== 'init') {
+    if (process.argv[2] !== 'init' && !process.argv[2].startsWith('-')) {
         checkHasInited()
 
         const packageJson = require(resolveCwd('package.json'))
         if (packageJson.dependencies && packageJson.dependencies['i-tofu'])
             await checkVersion('i-tofu')()
     }
-    await checkVersion('tofu-cli')()
+    if (!process.argv[2].startsWith('-')) {
+        await checkVersion('tofu-cli')()
+    }
 }

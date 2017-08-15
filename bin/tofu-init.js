@@ -26,7 +26,7 @@ async function init () {
     const spinner = ora('正在下载模板文件...')
     let name, registry
     const dist = './'
-    const registry = 'http://registry.npm.taobao.org'
+    registry = 'http://registry.npm.taobao.org'
     spinner.start()
     switch (templateType) {
         case 'PC':

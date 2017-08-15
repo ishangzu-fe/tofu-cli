@@ -1,6 +1,6 @@
 {
   "name": "tofu-cli",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.8",
   "description": "A tool",
   "main": "bin/tofu.js",
   "scripts": {
@@ -44,7 +44,7 @@
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.15.2",
     "extract-text-webpack-plugin": "^2.1.0",
-    "file-loader": "^0.9.0",
+    "file-loader": "^0.11.2",
     "friendly-errors-webpack-plugin": "^1.4.0",
     "fs-extra": "^4.0.1",
     "function-bind": "^1.0.2",
@@ -85,7 +85,8 @@
     "cz-conventional-changelog": "^2.0.0",
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^3.4.2",
-    "power-assert": "^1.4.4"
+    "power-assert": "^1.4.4",
+    "webpack-bundle-analyzer": "^2.9.0"
   },
   "engines": {
     "node": ">=7.6.0",
