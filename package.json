@@ -1,6 +1,6 @@
 {
   "name": "tofu-cli",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0-beta.9",
   "description": "A tool",
   "main": "bin/tofu.js",
   "scripts": {
