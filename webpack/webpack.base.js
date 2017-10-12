@@ -47,16 +47,24 @@ const getCssLoaders = (env, inVue) => {
 module.exports = function (config) {
     const env = JSON.parse(config.env.NODE_ENV)
     const tofurc = require('../lib/get-config')()
+    let entries = {
+        app:resolveCwd('src/main.js'),
+        vendor:['vue','vue-router','vuex','vue-moment','es6-promise'],
+        tofu:['i-tofu','tofu-http']
+    }
     let eslintRules = require('./rules')
-    if (tofurc && tofurc.rules) {
-        eslintRules = Object.assign({}, eslintRules, tofurc.rules)
+    if (tofurc) {
+        if(tofurc.rules){ // enlint规则
+            eslintRules = Object.assign({}, eslintRules, tofurc.rules)        
+        }
+
+        if(tofurc.entries){
+            entries = Object.assign({},entries,tofurc.entries);
+        }
     }
 
     return {
-        entry: {
-            app: resolveCwd('src/main.js'),
-            // adapter: resolveCwd('src/adapter/routes.js')
-        },
+        entry:entries,
         output: {
             path: resolveCwd('dist'),
             filename: '[name].js',

@@ -16,8 +16,18 @@ function getAssetsPath(_path) {
 }
 
 const tofurc = require('../lib/get-config')()
+
+let chunks = ['vendor','tofu','manifest']
 if (tofurc && tofurc.webpack && isPlainObject(tofurc.webpack)) {
     baseWebpackConfig = merge(baseWebpackConfig, tofurc.webpack)
+}
+
+if(tofurc && tofurc.entries){
+    for(let item in tofurc.entries){
+        if(item != 'app'){
+            chunks.push(item);
+        }
+    }
 }
 
 const webpackConfig = merge(baseWebpackConfig, {
@@ -53,21 +63,10 @@ const webpackConfig = merge(baseWebpackConfig, {
             },
             chunksSortMode: 'dependency'
         }),
+
         new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks (module, count) {
-                return (
-                    module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(
-                        resolveCwd('node_modules')
-                    ) === 0
-                )
-            }
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            chunks: ['vendor']
+            names: chunks,
+            minChunks:2
         }),
         new CopyWebpackPlugin([{
             from: resolveCwd('static'),
