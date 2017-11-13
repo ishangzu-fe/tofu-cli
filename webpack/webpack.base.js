@@ -47,19 +47,32 @@ const getCssLoaders = (env, inVue) => {
 module.exports = function (config) {
     const env = JSON.parse(config.env.NODE_ENV)
     const tofurc = require('../lib/get-config')()
+    let entries = {
+        app:resolveCwd('src/main.js'),
+        vendor:['vue','vue-router','vuex','vue-moment','es6-promise'],
+        tofu:['i-tofu','tofu-http']
+    }
+
     let eslintRules = require('./rules')
-    if (tofurc && tofurc.rules) {
-        eslintRules = Object.assign({}, eslintRules, tofurc.rules)
+    if (tofurc) {
+        if(tofurc.rules){ // enlint规则
+            eslintRules = Object.assign({}, eslintRules, tofurc.rules)        
+        }
+
+        if(tofurc.entries){
+            entries = Object.assign({},entries,tofurc.entries);
+        }
     }
 
     return {
-        entry: {
-            app: resolveCwd('src/main.js'),
-        },
+        entry:entries,
         output: {
             path: resolveCwd('dist'),
             filename: '[name].js',
-            publicPath: config.assetsPublicPath
+            chunkFilename: '[name].js',
+            publicPath: config.assetsPublicPath,
+            // library: 'dataAnalysis',
+            // libraryTarget: 'window'
         },
         resolveLoader: {
             modules: [resolveCur("../node_modules"), "node_modules"]
@@ -123,6 +136,7 @@ module.exports = function (config) {
                     loader: 'url-loader',
                     options: {
                         limit: 10000,
+                        name: 'static/img/[name].[hash:7].[ext]'
                     }
                 },
                 {
@@ -130,6 +144,7 @@ module.exports = function (config) {
                     loader: 'url-loader',
                     options: {
                         limit: 10000,
+                        name: 'static/font/[name].[hash:7].[ext]'
                     }
                 }
             ]
