@@ -1,6 +1,3 @@
-require('./lib/check-versions')()
-
-process.env.NODE_ENV = 'production'
 const ora = require('ora')
 const rm = require('rimraf')
 const path = require('path')
@@ -11,8 +8,20 @@ const merge = require('webpack-merge')
 const { log } = require('../lib/log')
 const config = require('./config').build
 
-module.exports = (compress, deleteDist, analysis) => {
-    const webpackConfig = require('./webpack.prod')(analysis)
+require('./lib/check-versions')()
+
+process.env.NODE_ENV = 'production'
+
+const { resolveCwd } = require('./lib/utils')
+const { isPlainObject } = require('./lib/utils')
+
+const tofurc = require('../lib/get-config')()
+let webpackConfig = require('./webpack.prod')
+if (tofurc && tofurc.webpack && isPlainObject(tofurc.webpack)) {
+    webpackConfig = merge(webpackConfig, tofurc.webpack)
+}
+
+module.exports = (compress, deleteDist) => {
     const spinner = ora('构建打包中...')
     spinner.start()
 

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Tofu-cli
+=======
+# Pan🍳
+>>>>>>> master
 
 > Simple CLI for scaffolding Vue.js projects
 <a href="https://www.npmjs.com/package/tofu-cli">

@@ -17,7 +17,7 @@ function getAssetsPath(_path) {
 
 const tofurc = require('../lib/get-config')()
 
-let chunks = ['vendor','tofu','manifest']
+let chunks = ['vendor','tofu']
 if (tofurc && tofurc.webpack && isPlainObject(tofurc.webpack)) {
     baseWebpackConfig = merge(baseWebpackConfig, tofurc.webpack)
 }
@@ -29,6 +29,8 @@ if(tofurc && tofurc.entries){
         }
     }
 }
+
+chunks.push('manifest');
 
 const webpackConfig = merge(baseWebpackConfig, {
     devtool: config.productionSourceMap ? '#source-map' : false,
@@ -76,6 +78,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     ]
 })
 
+<<<<<<< HEAD
 module.exports = function (analysis) {
     if (analysis) {
         const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -96,3 +99,6 @@ module.exports = function (analysis) {
     }
     return webpackConfig
 }
+=======
+module.exports = webpackConfig;
+>>>>>>> 1edc924b0b2633259b2aeb093ed4597b8e164df8

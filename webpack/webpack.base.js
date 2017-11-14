@@ -52,6 +52,7 @@ module.exports = function (config) {
         vendor:['vue','vue-router','vuex','vue-moment','es6-promise'],
         tofu:['i-tofu','tofu-http']
     }
+
     let eslintRules = require('./rules')
     if (tofurc) {
         if(tofurc.rules){ // enlint规则

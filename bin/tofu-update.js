@@ -218,10 +218,7 @@ async function updateFiles () {
 function updateDeps (dep, option) {
     const spinner = ora(`正在更新 ${dep} ...`).start()
     return Promise((resolve, reject) => {
-        const child = proc.spawn(
-            process.platform === 'win32' ? 'npm.cmd' : 'npm'
-            ['install', option, dep]
-        )
+        const child = spawn(`npm install ${option} ${dep}`)
 
         child.stdout.on('data', data => {
             console.log(`stdout: ${data}`)
