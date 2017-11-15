@@ -78,6 +78,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     ]
 })
 
+<<<<<<< HEAD
 module.exports = function (analysis) {
     if (analysis) {
         const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -98,3 +99,6 @@ module.exports = function (analysis) {
     }
     return webpackConfig
 }
+=======
+module.exports = webpackConfig;
+>>>>>>> 1edc924b0b2633259b2aeb093ed4597b8e164df8
