@@ -1,6 +1,6 @@
 {
   "name": "tofu-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A tool",
   "main": "bin/tofu.js",
   "scripts": {
@@ -37,12 +37,12 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.2",
     "cssnano": "^3.10.0",
+    "download": "^6.2.5",
     "eslint": "^3.18.0",
     "eslint-friendly-formatter": "^2.0.7",
     "eslint-loader": "^1.7.0",
     "eslint-plugin-html": "^3.0.0",
     "eventsource-polyfill": "^0.9.6",
-    "express": "^4.15.2",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.9.0",
     "friendly-errors-webpack-plugin": "^1.4.0",
