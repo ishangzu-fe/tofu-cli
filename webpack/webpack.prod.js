@@ -47,7 +47,7 @@ const webpackConfig = merge(baseWebpackConfig, {
             sourceMap: true
         }),
         new ExtractTextPlugin({
-            filename: getAssetsPath('css/[name].css')
+            filename: getAssetsPath('css/[name].[contenthash].css')
         }),
         new OptimizeCSSPlugin({
             cssProcessorOptions: {

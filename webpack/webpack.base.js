@@ -49,7 +49,7 @@ module.exports = function (config) {
     const tofurc = require('../lib/get-config')()
     let entries = {
         app:resolveCwd('src/main.js'),
-        vendor:['vue','vue-router','vuex','vue-moment','es6-promise'],
+        vendor:['vue','vue-router','vuex'],
         tofu:['i-tofu','tofu-http']
     }
 
