@@ -85,7 +85,8 @@
     "cz-conventional-changelog": "^2.0.0",
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^3.4.2",
-    "power-assert": "^1.4.4"
+    "power-assert": "^1.4.4",
+    "uglifyjs-webpack-plugin": "^1.1.5"
   },
   "engines": {
     "node": ">=7.6.0",
