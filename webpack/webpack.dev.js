@@ -24,7 +24,7 @@ module.exports = merge(baseWebpackConfig, {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new HtmlWebpackPlugin({
-            title: require(resolveCwd('config')).title,
+            title: require(resolveCwd('.tofurc.js')).title,
             template: 'template.html',
             inject: true
         }),

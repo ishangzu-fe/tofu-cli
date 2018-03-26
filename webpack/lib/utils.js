@@ -11,5 +11,5 @@ exports.isPlainObject = function (obj) {
 const path = require('path')
 const cwd = process.cwd()
 exports.resolveCwd = function (...p) {
-    return path.posix.join(cwd, ...p)
+    return (process.platform === 'win32') ? path.posix.join(cwd, ...p) : path.join(cwd, ...p)
 }

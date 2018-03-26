@@ -62,7 +62,7 @@ module.exports = (port, peace) => {
 
         if (tofurc._meta.type === 'electron') {
             const child = proc.spawn(
-                'npm',
+                process.platform === 'win32' ? 'npm.cmd' : 'npm',                
                 ['run', 'dev'],
                 { stdio: 'inherit' }
             )
