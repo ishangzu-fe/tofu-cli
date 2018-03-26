@@ -36,7 +36,8 @@ async function init () {
         default:
             break
     }
-    await download('http://192.168.0.192:8083/isz-pc/tofu-template/repository/archive.zip?ref=dev&private_token=AKM616C1BgXy1SMownRG', dist, { extract: true })
+    // 注意private_token目前是绑定的hujin0327@126.com
+    await download('http://192.168.0.192:8083/isz-pc/tofu-template/repository/archive.zip?ref=dev&private_token=3j_shUaB2V8uHk1qSaSd', dist, { extract: true })
     const absoluteCWD = path.resolve(cwd)
     const files = fs.readdirSync(absoluteCWD)
     let dirname
