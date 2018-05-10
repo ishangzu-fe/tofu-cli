@@ -49,8 +49,13 @@ module.exports = function (config) {
     const tofurc = require('../lib/get-config')()
     let entries = {
         app:resolveCwd('src/main.js'),
-        vendor:['vue','vue-router','vuex'],
-        tofu:['i-tofu','tofu-http']
+        vendor:['vue','vue-router','vuex']
+    }
+
+    if(tofurc._meta.type == 'Mobile'){
+        entries['tofu'] = ['mint-ui','tofu-http'];        
+    }else{
+        entries['tofu'] = ['i-tofu','tofu-http'];
     }
 
     let eslintRules = require('./rules')

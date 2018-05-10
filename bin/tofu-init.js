@@ -15,44 +15,66 @@ const registerLogger = require('../lib/register-logger')
 init()
 registerLogger('init', process)
 
-async function init () {
+async function init(){
     const { templateType } = await selectTemplate()
+    const projectName = process.argv[2];
+    let absoluteCWD = path.resolve(cwd);
+    let projectPath;
+    
 
-    const { confirm } = await inquirer.prompt({
-        type: 'confirm',
-        name: 'confirm',
-        message: '确定要将项目创建在当前文件夹吗？'
-    })
+    if (!projectName) {
+        const { confirm } = await inquirer.prompt({
+            type: 'confirm',
+            name: 'confirm',
+            message: '确定要将项目创建在当前文件夹吗？'
+        })
 
-    if (!confirm) return
+        if (!confirm) return
+        projectPath = absoluteCWD;
+    } else {
+        projectPath = path.join(absoluteCWD,projectName);
+        // fs.mkdirpSync(projectName);
+    }
 
     const spinner = ora('正在下载模板文件...')
-    const dist = './'
+    const dist = './';
+    let url,reg;
     spinner.start()
     switch (templateType) {
         case 'PC':
-            name = 'pitaya'
-            break
+            name = 'pitaya';
+            reg = /^tofu\-template.*$/
+            // 注意private_token目前是绑定的hujin0327@126.com            
+            url = 'http://122.225.206.74:9677/isz-pc/tofu-template/repository/archive.zip?ref=dev&private_token=3j_shUaB2V8uHk1qSaSd'
+            break;
+        case 'Mobile':
+            name = 'mobile';
+            reg = /^mobile\-template.*$/            
+            url = 'http://122.225.206.74:9677/isz-pc/mobile-template/repository/archive.zip?ref=master&private_token=3j_shUaB2V8uHk1qSaSd';
         default:
             break
     }
-    // 注意private_token目前是绑定的hujin0327@126.com
-    await download('http://192.168.0.192:8083/isz-pc/tofu-template/repository/archive.zip?ref=dev&private_token=3j_shUaB2V8uHk1qSaSd', dist, { extract: true })
-    const absoluteCWD = path.resolve(cwd)
+    await download(url, dist, { extract: true })
     const files = fs.readdirSync(absoluteCWD)
     let dirname
     for (file of files) {
-        if (/^tofu\-template.*$/.test(file)) {
+        if (reg.test(file)) {
             dirname = file
         }
     }
     const currentPath = path.join(absoluteCWD, dirname)
-    fs.moveSync(currentPath, absoluteCWD)
+    fs.moveSync(currentPath, projectPath)
 
     // git init
     try {
-        execSync('git init')
-        const preCommitPath = path.join(absoluteCWD, '.git/hooks/pre-commit')
+        let exec = '';
+        if (projectName) {
+            exec = 'cd '+ projectName +'\n';
+        }
+
+        execSync(exec + 'git init')         
+        
+        const preCommitPath = path.join(projectPath, '.git/hooks/pre-commit')
         fs.createFileSync(preCommitPath)
         fs.writeFileSync(preCommitPath, '#!/bin/sh\nexec tofu lint')
         fs.chmodSync(preCommitPath, 0755)
@@ -63,6 +85,7 @@ async function init () {
 
     spinner.stop()
     afterDownload()
+    
 }
 
 async function selectTemplate () {
@@ -72,7 +95,8 @@ async function selectTemplate () {
         type: 'list',
         default: 0,
         choices: [
-            'PC'
+            'PC',
+            'Mobile'
         ]
     }).catch(err => {
         console.error('选择模板类型出错')
