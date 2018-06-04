@@ -9,8 +9,8 @@ const { resolveCwd } = require('../lib/utils')
 
 main()
 
-async function main () {
-    if (process.argv[2] !== 'lint') await beforeInit()
+function main () {
+    // if (process.argv[2] !== 'lint') await beforeInit()
 
     program.version(require('../package').version)
     .usage('<command> [options]')

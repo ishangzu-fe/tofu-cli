@@ -14,7 +14,7 @@ module.exports = {
     'no-new-wrappers': 2,
     'no-redeclare': 2,
 
-    'no-undefined': 2,
+    // 'no-undefined': 2,
     'no-undef-init': 2,
     // 'no-undef': 2,
     'no-unused-vars': 1,
