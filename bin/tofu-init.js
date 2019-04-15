@@ -15,12 +15,12 @@ const registerLogger = require('../lib/register-logger')
 init()
 registerLogger('init', process)
 
-async function init(){
+async function init() {
     const { templateType } = await selectTemplate()
     const projectName = process.argv[2];
     let absoluteCWD = path.resolve(cwd);
     let projectPath;
-    
+
 
     if (!projectName) {
         const { confirm } = await inquirer.prompt({
@@ -32,24 +32,24 @@ async function init(){
         if (!confirm) return
         projectPath = absoluteCWD;
     } else {
-        projectPath = path.join(absoluteCWD,projectName);
+        projectPath = path.join(absoluteCWD, projectName);
         // fs.mkdirpSync(projectName);
     }
 
     const spinner = ora('正在下载模板文件...')
     const dist = './';
-    let url,reg;
+    let url, reg;
     spinner.start()
     switch (templateType) {
         case 'PC':
             name = 'pitaya';
             reg = /^tofu\-template.*$/
-            // 注意private_token目前是绑定的hujin0327@126.com            
+            // 注意private_token目前是绑定的hujin0327@126.com
             url = 'http://122.225.206.74:9677/isz-pc/tofu-template/repository/archive.zip?ref=dev&private_token=3j_shUaB2V8uHk1qSaSd'
             break;
         case 'Mobile':
             name = 'mobile';
-            reg = /^mobile\-template.*$/            
+            reg = /^mobile\-template.*$/
             url = 'http://122.225.206.74:9677/isz-pc/mobile-template/repository/archive.zip?ref=master&private_token=3j_shUaB2V8uHk1qSaSd';
         default:
             break
@@ -69,26 +69,26 @@ async function init(){
     try {
         let exec = '';
         if (projectName) {
-            exec = 'cd '+ projectName +'\n';
+            exec = 'cd ' + projectName + '\n';
         }
 
-        execSync(exec + 'git init')         
-        
+        execSync(exec + 'git init')
+
         const preCommitPath = path.join(projectPath, '.git/hooks/pre-commit')
         fs.createFileSync(preCommitPath)
         fs.writeFileSync(preCommitPath, '#!/bin/sh\nexec tofu lint')
         fs.chmodSync(preCommitPath, 0755)
-    } catch(err) {
+    } catch (err) {
         console.log('Git init failed！')
         console.error(err)
     }
 
     spinner.stop()
     afterDownload()
-    
+
 }
 
-async function selectTemplate () {
+async function selectTemplate() {
     return await inquirer.prompt({
         name: 'templateType',
         message: '请选择新建的模板类型',
@@ -108,7 +108,7 @@ async function selectTemplate () {
  * 下载之后做的事情
  * @param {String} dist 项目目录
  */
-function afterDownload () {
+function afterDownload() {
     fs.removeSync(resolveCwd('.npmignore'))
 
     log();
